@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
 
@@ -151,6 +152,41 @@ public class FirstTest {
          );
      }
 
+     @Test
+     public void testCancelSearchResults() {
+         waitForElementAndClick(
+                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                 "Cannot find Search Wikipedia input",
+                 5
+         );
+
+         waitForElementAndSendKeys(
+                 By.xpath("//*[contains(@text, 'Search…')]"),
+                 "Java",
+                 "Cannot find search input",
+                 5
+         );
+
+         waitForElementPresent(
+                 By.id("org.wikipedia:id/search_results_list"),
+                 "Cannot find results",
+                 15
+         );
+
+         waitForElementAndClick(
+                 By.id("org.wikipedia:id/search_close_btn"),
+                 "Cannot find X to cancel search",
+                 5
+         );
+
+         waitForElementNotPresent(
+                 By.id("org.wikipedia:id/search_results_list"),
+                 "We see results",
+                 5
+         );
+
+     }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -185,5 +221,12 @@ public class FirstTest {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.clear();
         return element;
+    }
+
+    private int waitResultsAndCount(By by, String error_message, long timeoutInSeconds) {
+        waitForElementPresent(by, error_message, timeoutInSeconds);
+
+        List<WebElement> results = driver.findElements(by);
+        return results.size();
     }
 }
