@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -85,7 +86,9 @@ public class HomeworkSix {
     }
 
     private void assertElementPresent(By by, String error_message) {
-        if(driver.findElements(by).size() == 0) {
+        try {
+            driver.findElement(by);
+        } catch (NoSuchElementException e) {
             String default_message = "An element " + by.toString() + " supported to be not present";
             throw new AssertionError(default_message + " " + error_message);
         }
