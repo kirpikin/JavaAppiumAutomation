@@ -1,6 +1,9 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 abstract public class SearchPageObject extends MainPageObject {
     public static String SEARCH_INIT_ELEMENT;
@@ -89,6 +92,10 @@ abstract public class SearchPageObject extends MainPageObject {
 
     public void assertThereIsNoResultOfSearch() {
         this.asserElementNotPresent(SEARCH_RESULTS_ELEMENT, "We supposed not to find any results");
+    }
+
+    public boolean isSearchResultsContainsString(String searhing_string) {
+       return isResultsContainsText(SEARCH_RESULTS_LIST_ELEMENT, searhing_string);
     }
 
 }

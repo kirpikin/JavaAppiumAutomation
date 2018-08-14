@@ -42,6 +42,7 @@ public class MainPageObject {
 
     public WebElement waitForElementAndSendKeys(String locator, String value, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(locator, error_message, timeoutInSeconds);
+        element.clear();
         element.sendKeys(value);
         return element;
     }
@@ -69,18 +70,14 @@ public class MainPageObject {
         return results.size();
     }
 
-    public boolean isResultsContainsText(String locator, String searchingText, String error_message, long timeoutInSeconds) {
-        waitForElementPresent(locator, error_message, 15);
+    public boolean isResultsContainsText(String locator, String searchingText) {
         By by = this.getLocatorByString(locator);
         List<WebElement> results = driver.findElements(by);
 
         for (WebElement result : results) {
-            if(result.getAttribute("text").contains(searchingText)) {
-
-            } else {
-                return false;
-            }
+            if(!result.getAttribute("name").contains(searchingText)) return false;
         }
+
         return true;
     }
 
