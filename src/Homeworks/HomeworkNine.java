@@ -1,5 +1,8 @@
+package Homeworks;
+
 import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
+import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class HomeworkNine extends CoreTestCase {
@@ -10,7 +13,7 @@ public class HomeworkNine extends CoreTestCase {
 
         String name_of_folder = "Learning programming";
 
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
 

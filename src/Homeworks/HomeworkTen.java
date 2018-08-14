@@ -1,4 +1,4 @@
-package tests;
+package Homeworks;
 
 import lib.CoreTestCase;
 import lib.Platform;
@@ -10,14 +10,19 @@ import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.MyListsPageObjectFactory;
 import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
-public class MyListsTest extends CoreTestCase {
-
-    private static String name_of_folder = "Learning programming";
+public class HomeworkTen extends CoreTestCase {
 
     @Test
-    public void testSaveFirstArticleToMyList() {
+    public void testTwoSavedArticle() {
+
+        String first_article_title = "Java (programming language)";
+        String second_article_title = "Island of Indonesia";
+        String name_of_folder = "Learning programming";
+
+        //  Add first article
 
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchInput();
@@ -27,7 +32,19 @@ public class MyListsTest extends CoreTestCase {
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleElement();
 
-        String article_title = ArticlePageObject.getArticleTitle();
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToMyList(name_of_folder);
+        } else {
+            ArticlePageObject.addArticleToMySaved();
+        }
+
+        ArticlePageObject.closeArticle();
+
+        // Add second article
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.clickByArticleWithSubstring("Island of Indonesia");
+        ArticlePageObject.waitForTitleElement();
 
         if (Platform.getInstance().isAndroid()) {
             ArticlePageObject.addArticleToMyList(name_of_folder);
@@ -37,16 +54,24 @@ public class MyListsTest extends CoreTestCase {
 
         ArticlePageObject.closeArticle();
 
+        // Delete article
+
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
         NavigationUI.clickMyLists();
 
         MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
 
-        if(Platform.getInstance().isAndroid()) {
+        if (Platform.getInstance().isAndroid()) {
             MyListsPageObject.openFolderByName(name_of_folder);
         }
 
-        MyListsPageObject.swipeByArticleToDelete(article_title);
+        MyListsPageObject.swipeByArticleToDelete(first_article_title);
+
+        //  Check count of articles
+        MyListsPageObject.waitForArticleToAppearByTitle(second_article_title);
+
+        Assert.assertTrue(MyListsPageObject.countSavedArticle() == 1);
 
     }
+
 }
